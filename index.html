@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Maquette projet Co</title>
+        <meta name='viewport' content='width=device-width; initial-scale=1.0;'>
+
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/calendar.css">
+        <link rel="stylesheet" href="css/import.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    </head>
+
+<!-- START BODY -->
+<body>
+  <!-- START BODY -->
+    <div class="container">
+          <div class="row">
+          <!-- START HEADER -->
+          <header>
+              <h1 class="hidden">Traces vélo</h1>
+              <img class="logo" src="images/trace%20ta%20route.png">
+          </header>
+          <!-- END HEADER -->
+
+              <!-- START MENU TABS -->
+              <div class="tabs">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tableau-de-bord" data-toggle="tab"><span class="glyphicon glyphicon-dashboard"></span><br/> <span class="title-menu">Tableau de bord</span></a></li>
+                  <li><a href="#calendrier" data-toggle="tab"><span class="glyphicon glyphicon-calendar"></span><br/>  <span class="title-menu">Calendrier</span></a></li>
+                  <li><a href="#graphiques" data-toggle="tab"><span class="glyphicon glyphicon-stats"></span><br/>  <span class="title-menu">Graphiques</span></a></li>
+                  <li><a href="#parcours" data-toggle="tab"><span class="glyphicon glyphicon-map-marker"></span><br/>  <span class="title-menu">Parcours</span></a></li>
+                  <li><a href="#appareils" data-toggle="tab"><span class="glyphicon glyphicon-phone"></span><br/>  <span class="title-menu">Mes appareils</span></a></li>
+                  <li><a href="#parametres" data-toggle="tab"><span class="glyphicon glyphicon-certificate"></span><br/>  <span class="title-menu">Paramètres</span></a></li>
+                </ul>
+                <!-- END MENU TABS -->
+
+                <!-- START DASHBOARD -->
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tableau-de-bord">
+                      <h3 class="text-center">Tableau de bord</h3>
+                        <div class="col-lg-12">
+                          <h4>Ajouter une trace</h4>
+                          <div class=" list-group file-upload">
+                              <div class="file-select">
+                                  <div class="file-select-button" id="fileName">Choisissez un fichier</div>
+                                  <div class="file-select-name" id="noFile">Aucun fichier choisi</div>
+                                  <input type="file" name="chooseFile" id="chooseFile">
+
+                              </div>
+
+                              <div class="col-lg-12">
+                                  <button style="border: none; border-radius: 0; margin-top:15px;" class="hidden btn-lg btn-success center-block" id="Send-file">Envoyer</button>
+                              </div>
+                          </div>
+
+                          <h4>Mes parcours</h4>
+                          <ul class="list-group pull-left">
+                              <li class="list-group-item">
+                                  <h4>Balade au salbert&nbsp; &nbsp;<span class="badge pull-right">21/08/2015</span></h4>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+                  <!-- END DASHBOARD -->
+
+                  <!-- START CALENDAR -->
+                  <div class="tab-pane" id="calendrier">
+                    <h3 class="text-center">Calendrier</h3>
+
+                          <div id="holder" class="row" >
+                              <div class="col-md-12 col-sm-12 col-xs-12">
+                              </div>
+                          </div>
+                          <!-- START CALENDAR CONSTRUCTOR -->
+                          <script type="text/tmpl" id="tmpl">
+                          {{
+                          var date = date || new Date(),
+                              month = date.getMonth(),
+                              year = date.getFullYear(),
+                              first = new Date(year, month, 1),
+                              last = new Date(year, month + 1, 0),
+                              startingDay = first.getDay(),
+                              thedate = new Date(year, month, 1 - startingDay),
+                              dayclass = lastmonthcss,
+                              today = new Date(),
+                              i, j;
+                          if (mode === 'week') {
+                            thedate = new Date(date);
+                            thedate.setDate(date.getDate() - date.getDay());
+                            first = new Date(thedate);
+                            last = new Date(thedate);
+                            last.setDate(last.getDate()+6);
+                          } else if (mode === 'day') {
+                            thedate = new Date(date);
+                            first = new Date(thedate);
+                            last = new Date(thedate);
+                            last.setDate(thedate.getDate() + 1);
+                          }
+
+                          }}
+                          <table class="calendar-table table table-condensed table-tight">
+                            <thead>
+                              <tr>
+                                <td colspan="7" style="text-align: center">
+                                  <table style="white-space: nowrap; width: 100%">
+                                    <tr>
+                                      <td style="text-align: left;">
+                                        <span class="btn-group">
+                                          <button class="js-cal-prev btn btn-default">&lt;</button>
+                                          <button class="js-cal-next btn btn-default">&gt;</button>
+                                        </span>
+                                        <button class="js-cal-option btn btn-default {{: first.toDateInt() <= today.toDateInt() && today.toDateInt() <= last.toDateInt() ? 'active':'' }}" data-date="{{: today.toISOString()}}" data-mode="month">{{: todayname }}</button>
+                                      </td>
+                                      <td>
+                                        <span class="btn-group btn-group-lg">
+                                          {{ if (mode !== 'day') { }}
+                                            {{ if (mode === 'month') { }}<button class="js-cal-option btn btn-link" data-mode="year">{{: months[month] }}</button>{{ } }}
+                                            {{ if (mode ==='week') { }}
+                                              <button class="btn btn-link disabled">{{: shortMonths[first.getMonth()] }} {{: first.getDate() }} - {{: shortMonths[last.getMonth()] }} {{: last.getDate() }}</button>
+                                            {{ } }}
+                                            <button class="js-cal-years btn btn-link">{{: year}}</button>
+                                          {{ } else { }}
+                                            <button class="btn btn-link disabled">{{: date.toDateString() }}</button>
+                                          {{ } }}
+                                        </span>
+                                      </td>
+                                      <td style="text-align: right">
+                                        <span class="btn-group">
+                                          <button class="js-cal-option btn btn-default {{: mode==='year'? 'active':'' }}" data-mode="year">Année</button>
+                                          <button class="js-cal-option btn btn-default {{: mode==='month'? 'active':'' }}" data-mode="month">Mois</button>
+                                          <button class="js-cal-option btn btn-default {{: mode==='week'? 'active':'' }}" data-mode="week">Semaine</button>
+                                          <button class="js-cal-option btn btn-default {{: mode==='day'? 'active':'' }}" data-mode="day">Jour</button>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </table>
+
+                                </td>
+                              </tr>
+                            </thead>
+                            {{ if (mode ==='year') {
+                              month = 0;
+                            }}
+                            <tbody>
+                              {{ for (j = 0; j < 3; j++) { }}
+                              <tr>
+                                {{ for (i = 0; i < 4; i++) { }}
+                                <td class="calendar-month month-{{:month}} js-cal-option" data-date="{{: new Date(year, month, 1).toISOString() }}" data-mode="month">
+                                  {{: months[month] }}
+                                  {{ month++;}}
+                                </td>
+                                {{ } }}
+                              </tr>
+                              {{ } }}
+                            </tbody>
+                            {{ } }}
+                            {{ if (mode ==='month' || mode ==='week') { }}
+                            <thead>
+                              <tr class="c-weeks">
+                                {{ for (i = 0; i < 7; i++) { }}
+                                  <th class="c-name">
+                                    {{: days[i] }}
+                                  </th>
+                                {{ } }}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {{ for (j = 0; j < 6 && (j < 1 || mode === 'month'); j++) { }}
+                              <tr>
+                                {{ for (i = 0; i < 7; i++) { }}
+                                {{ if (thedate > last) { dayclass = nextmonthcss; } else if (thedate >= first) { dayclass = thismonthcss; } }}
+                                <td class="calendar-day {{: dayclass }} {{: thedate.toDateCssClass() }} {{: date.toDateCssClass() === thedate.toDateCssClass() ? 'selected':'' }} {{: daycss[i] }} js-cal-option" data-date="{{: thedate.toISOString() }}">
+                                  <div class="date">{{: thedate.getDate() }}</div>
+                                  {{ thedate.setDate(thedate.getDate() + 1);}}
+                                </td>
+                                {{ } }}
+                              </tr>
+                              {{ } }}
+                            </tbody>
+                            {{ } }}
+                            {{ if (mode ==='day') { }}
+                            <tbody>
+                              <tr>
+                                <td colspan="7">
+                                  <table class="table table-striped table-condensed table-tight-vert" >
+                                    <thead>
+                                      <tr>
+                                        <th>&nbsp;</th>
+                                        <th style="text-align: center; width: 100%">{{: days[date.getDay()] }}</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <th class="timetitle" >Jour entier</th>
+                                        <td class="{{: date.toDateCssClass() }}">  </td>
+                                      </tr>
+                                      <tr>
+                                        <th class="timetitle" >Avant 6h</th>
+                                        <td class="time-0-0"> </td>
+                                      </tr>
+                                      {{for (i = 6; i < 22; i++) { }}
+                                      <tr>
+                                        <th class="timetitle" >{{: i <= 22 ? i : i - 12 }}:00</th>
+                                        <td class="time-{{: i}}-0"> </td>
+                                      </tr>
+                                      <tr>
+                                        <th class="timetitle" >{{: i <= 22 ? i : i - 12 }}:30</th>
+                                        <td class="time-{{: i}}-30"> </td>
+                                      </tr>
+                                      {{ } }}
+                                      <tr>
+                                        <th class="timetitle" >Après 22h</th>
+                                        <td class="time-22-0"> </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+                              </tr>
+                            </tbody>
+                            {{ } }}
+                          </table>
+                        </script>
+                        <!-- END CALENDAR CONSTRUCTOR -->
+                  </div>
+
+                  <!-- START GRAPHICS CURVES -->
+                  <div class="tab-pane" id="graphiques">
+                      <h3 class="text-center">Graphiques</h3>
+                      <ul class="list-group">
+                          <li class="list-group-item">
+                              <h4>&nbsp; &nbsp;<span class="badge pull-right">21/10/15</span></h4>
+                              <div class="Graph" id="Graph-1">
+
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <h4>&nbsp; &nbsp;<span class="badge pull-right">21/10/15</span></h4>
+                              <div class="Graph" id="Graph-2">
+
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <h4>&nbsp; &nbsp;<span class="badge pull-right">21/10/15</span></h4>
+                              <div class="Graph" id="Graph-3">
+
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <h4>&nbsp; &nbsp;<span class="badge pull-right">21/10/15</span></h4>
+                              <div class="Graph" id="Graph-4">
+
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <h4>&nbsp; &nbsp;<span class="badge pull-right">21/10/15</span></h4>
+                              <div class="Graph" id="Graph-5">
+
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <h4>&nbsp; &nbsp;<span class="badge pull-right">21/10/15</span></h4>
+                              <div class="Graph" id="Graph-6">
+
+                              </div>
+                          </li>
+                      </ul>
+                  </div>
+                  <!-- END GRAPHICS CURVES -->
+
+                  <!-- START ROUTE MAP -->
+                  <div class="tab-pane" id="parcours">
+                      <h3 class="text-center">Itinéraires</h3>
+                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d85941.55722238385!2d6.774379782349683!3d47.69075728529985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47923b78fc4e48e1%3A0x409ce34b30d50d0!2sBelfort!5e0!3m2!1sfr!2sfr!4v1445167632246" width="100%" height="500px" frameborder="0" style="border:0" allowfullscreen></iframe>
+                  </div>
+                  <div class="tab-pane" id="appareils">
+                      <h3 class="text-center">Mes appareils</h3>
+                      <p>Contenu de l'onglet "mes appareils"</p>
+                  </div>
+                  <div class="tab-pane" id="parametres">
+                      <h3 class="text-center">Mes paramètres</h3>
+                      <p>Mes paramètres</p>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!--END BODY-->
+
+<!-- START JS -->
+<script src='js/jquery/jquery-2.1.3.js'></script>
+<script src='js/bootstrap/bootstrap.min.js'></script>
+
+<script src="js/index.js"></script>
+<script src="js/calendar/calendar.js"></script>
+<script src="js/high-charts/custom-graphs.js"></script>
+<script src="js/high-charts/highchart.js"></script>
+<script src="js/high-charts/highchart-more.js"></script>
+<script src="js/file-import/file-import.js"></script>
+<script src="js/high-charts/exporting.js"></script>
+<!-- END JS -->
+</html>

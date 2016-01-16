@@ -1,0 +1,156 @@
+body {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background: url(../images/fond-site-velo.jpg) no-repeat center fixed;
+    background-size: cover;
+    height: 100%;
+}
+h1{
+    text-indent: -9999px;
+}
+h3 {
+    margin-top: 0;
+}
+
+.bg-white{
+    background-color: white;
+}
+
+.badge {
+  background-color: #c41232;
+}
+
+.tabs-left {
+  margin-top: 3rem;
+}
+
+.nav-tabs {
+  float: left;
+    position: fixed;
+  border-bottom: 0;
+}
+.nav-tabs li {
+  float: none;
+  margin: 0;
+}
+.nav-tabs li a {
+    margin-right: 0;
+    border: 0;
+    color: #ffffff;
+    text-align: center;
+    background-color: #c41232;
+}
+
+.nav-tabs li.active a {
+    color: #C41232;
+}
+
+
+.nav-tabs>li>a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 0 0 0 0;
+}
+
+@media (min-width: 1px){
+    .nav-tabs li a span.title-menu {
+        display: none;
+        visibility: hidden;
+    }
+
+    .tab-content {
+        margin-left: 46px;
+    }
+}
+
+@media (min-width: 889px){
+
+    .nav-tabs{
+        width: 139px;
+    }
+    .tab-content {
+        margin-left: 137px;
+    }
+
+    .nav-tabs li a span.title-menu {
+        display: block;
+        visibility:visible;
+        font-size: 1.5rem;
+    }
+    .nav-tabs li a span {
+        font-size: 4rem;
+    }
+
+}
+
+@media (min-width: 1200px) {
+    .Graph{
+        min-width: 950px;
+    }
+}
+
+.nav-tabs li a:hover {
+  background-color: #c41232;
+}
+.nav-tabs .glyphicon {
+  color: #fff;
+}
+.nav-tabs .active .glyphicon {
+  color: #c41232;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  border: 0;
+}
+
+
+.tab-content .tab-pane {
+  display: none;
+  background-color: #fff;
+  padding: 1.6rem;
+  min-height: 520px;
+}
+.tab-content .active {
+  display: block;
+}
+
+.list-group {
+  width: 100%;
+}
+.list-group .list-group-item {
+  height: 100%;
+}
+.list-group .list-group-item h4, .list-group .list-group-item span {
+  line-height: 11px;
+}
+
+.disconnect{
+  font-size: 2rem;
+  height:85px;
+  line-height:85px;
+  text-align:center; /* centrage horizontal */
+}
+
+/*Logo*/
+@media (min-width: 640px) {
+    .logo {
+        width: 60%;
+        margin-right: auto;
+        margin-left: auto;
+        display: block;
+        position: relative;
+    }
+}
+
+@media (max-width: 640px) {
+    .logo {
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        display: block;
+        position: relative;
+    }
+}
+
