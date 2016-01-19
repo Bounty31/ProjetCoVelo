@@ -10,7 +10,7 @@ catch (Exception $e)
 
 /*var_dump($_POST['trace']);*/
 //creation d'un id de trace
-$result = $bdd->query("SELECT * FROM trace where id_trace = 10");
+$result = $bdd->query("SELECT * FROM trace where id_trace = 5");
 $data = [];
 
 $altitude = [];
