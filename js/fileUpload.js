@@ -13,6 +13,10 @@ document.getElementById('chooseFile').onchange = function(){
 
 function validateFile(){
 
+ //Affichage du loader
+ var loader = document.getElementById("loader");
+ loader.classList.remove("hidden");
+
  // file = document.getElementById('chooseFile').files[0];
   var reader = new FileReader();
   reader.onload = function(progressEvent){
@@ -60,7 +64,8 @@ console.log(tracedata);
      data: {trace : tracedata},
      success: function() {
       //action quand tout est chargé
-          alert("finish");       
+          alert("finish");
+         loader.classList.add("hidden");
         }
       });
  };

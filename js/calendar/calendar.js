@@ -283,3 +283,4 @@ var data = [],
 $('#holder').calendar({
   data: data
 });
+

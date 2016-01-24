@@ -6,17 +6,14 @@ body {
     background-size: cover;
     height: 100%;
 }
-h1{
-    text-indent: -9999px;
-}
-h3 {
-    margin-top: 0;
-}
 
 .bg-white{
     background-color: white;
 }
 
+#loader{
+    margin-top: 20px;
+}
 .badge {
   background-color: #c41232;
 }

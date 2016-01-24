@@ -13,7 +13,7 @@
     </head>
 
 <!-- START BODY -->
-<body>
+<body class="">
   <!-- START BODY -->
     <div class="container">
           <div class="row">
@@ -44,16 +44,46 @@
                           <h4>Ajouter une trace</h4>
                           <div class=" list-group file-upload">
                               <div class="file-select">
-                                  <div class="file-select-button" id="fileName">Choisissez un fichier</div>
-                                  <div class="file-select-name" id="noFile">Aucun fichier choisi</div>
+                                  <div class="file-select-button" id="fileName">Choisissez un fichier.</div>
+                                  <div class="file-select-name" id="noFile">Aucun fichier choisi.</div>
                                   <input type="file" name="chooseFile" id="chooseFile">
-
-                              </div>
-
-                              <div class="col-lg-12">
-                                  <button style="border: none; border-radius: 0; margin-top:15px;" class="hidden btn-lg btn-success center-block" id="Send-file" onclick="validateFile();">Envoyer</button>
                               </div>
                           </div>
+
+                          <!-- MODAL TRACE NAME FORM -->
+                          <div class="modal fade in" id="traceModalName" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h3 class="text-center text-success modal-title">Votre fichier semble correct :)</h3>
+                                          <h5 class="text-center">Pour continuer, nous avons besoin que vous nommiez ce parcours.</h5>
+                                      </div>
+
+                                      <div class="modal-body">
+                                          <!-- The form is placed inside the body of modal -->
+                                          <form id="NameForm" method="post" class="form-horizontal">
+                                              <div class="form-group">
+                                                  <label class="col-xs-3 control-label">Nom :</label>
+                                                  <div class="col-xs-9">
+                                                      <input type="text" class="form-control" name="nom_trace" />
+                                                  </div>
+                                              </div>
+
+                                              <div id="modalAction" class="form-group">
+                                                  <div class="col-xs-9 col-xs-offset-3">
+                                                      <button type="button" class="btn btn-success" id="Send-file" onclick="validateFile();">Envoyer</button>
+                                                      <button id="dismissFileModal" type="button" class="btn btn-default">Changer le fichier</button>
+                                                  </div>
+                                                  <div class="col-xs-12">
+                                                      <img id="loader" src="images/loader.gif" alt="loader" width="50px" height="50px" class="center-block hidden">
+                                                  </div>
+                                              </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- END MODAL TRACE NAME FORM -->
 
                           <h4>Mes parcours</h4>
                           <ul class="list-group pull-left">
@@ -222,7 +252,7 @@
                             {{ } }}
                           </table>
                         </script>
-                        <!-- END CALENDAR CONSTRUCTOR -->
+                          <!-- END CALENDAR CONSTRUCTOR -->
                   </div>
 
                   <!-- START GRAPHICS CURVES -->
