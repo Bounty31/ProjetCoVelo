@@ -1,118 +1,148 @@
+var clickedPlotLimits = [];
+var editOption = true;
+var clicked = 0;
+
 //ALTITUDE/DISTANCE
-function createGraphs(charts_arrays){
-	$(function () {
+function createGraphs(charts_arrays) {
+    $(function () {
+        Highcharts.setOptions({
+            colors: ['#C41232', '#C41232']
+        });
 
+        $('#Graph-1').highcharts({
+            chart: {
+                zoomType: 'x',
+                type: 'spline',
+                events: {
+                    click: function(evt) {
+                        if (editOption) {
+                            var xValue = Math.round(evt.xAxis[0].value);
+                            var xAxis = evt.xAxis[0].axis;
+                            clicked++;
 
-		Highcharts.setOptions({
-			colors: ['#C41232', '#C41232']
-		});
+                            if (clicked == 1) {
+                                clickedPlotLimits.push(xValue);
+                            }
+                            else if (clicked == 2) {
+                                if (xValue < clickedPlotLimits[0]) {
+                                    clickedPlotLimits.unshift(xValue);
+                                }
+                                else {
+                                    clickedPlotLimits.push(xValue);
+                                }
+                            }
 
-            $('#Graph-1').highcharts({
-            	chart: {
-            		zoomType: 'x',
-            		type: 'spline'
-            	},
-            	title: {
-            		text: 'Altitude'
-            	},
-            	subtitle: {
-            		text: document.ontouchstart === undefined ?
-            		'Cliquez et laissez enfoncé pour zoomer' : 'Maintenez enfoncé la souris et déplacez là pour zoomer'
-            	},
-            	xAxis: {
-            		type: 'number',
-            		title : {
-            			text : 'Distance en mètres'
-            		},
-            		labels: {
-            			formatter: function () {
-            				return this.value + 'm';
-            			}
-            		}
-            	},
-            	yAxis: {
-            		type: 'number',
-            		title: {
-            			text: 'Altitude en mètres'
-            		},
-            		labels: {
-            			formatter: function () {
-            				return this.value + 'm';
-            			}
-            		}
-            	},
-            	legend: {
-            		enabled: true,
-            		navigation:{
-            			activeColor: '#C41232'
-            		}
-            	},
+                            xAxis.addPlotLine({
+                                value: xValue,
+                                width: 2,
+                                color: 'red',
+                                id: "plot"
+                            });
 
-            	tooltip: {
-            		crosshairs: true,
-            		shared: true
-            	},
+                            if (clicked == 2) {
+                                setTimeout(function() {
+                                    console.log(clickedPlotLimits);
+                                    clickedPlotLimits = [];
 
-            	plotOptions: {
+                                    $.each(xAxis.plotLinesAndBands, function() {
+                                        xAxis.removePlotLine(this.id);
+                                    });
+                                    clicked = 0;
+                                }, 1000);
+                            }
 
-            		series: {
-            			lineColor: '#C41232'
-            		},
-
-            		area: {
-            			fillColor: {
-            				linearGradient: {
-            					x1: 0,
-            					y1: 0,
-            					x2: 0,
-            					y2: 1
-            				},
-            				stops: [
-            				[0, 'rgba(196, 18, 50, 1)'],
-            				[1, 'rgba(255, 255, 255, 0)']
-            				]
-            			},
-            			marker: {
-            				radius: 2,
-            				enabled: false
-            			},
-            			lineWidth: 1,
-            			states: {
-            				hover: {
-            					lineWidth: 2
-            				}
-            			},
-            			threshold: null
-            		}
-
-            	},
-
-            	series: [
-            	{
-            		type: 'area',
-            		name: 'Dénivelé',
-            		data:  charts_arrays["graph1"],
-            		tooltip: {
-            			pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} m</b><br/>' +
-            			'<span style="font-weight: bold; color: {series.color}">Distance parcourue</span>: <b>{point.x:.1f} m</b><br/> '
-            		}
-            	}
-                //Permet l'affichage d'une deuxième courbe avec le JSON
-                ,
-                {
-                	type: 'area',
-                	name: 'Dénivelé parcours 2',
-                	data: charts_arrays["graph1_2"]
+                        }
+                    }
                 }
-                ]
-            });
+            },
+            title: {
+                text: 'Altitude'
+            },
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                    'Cliquez et laissez enfoncé pour zoomer' : 'Maintenez enfoncé la souris et déplacez la pour zoomer'
+            },
+            xAxis: {
+                type: 'number',
+                title: {
+                    text: 'Distance en mètres'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value + 'm';
+                    }
+                }
+            },
+            yAxis: {
+                type: 'number',
+                title: {
+                    text: 'Altitude en mètres'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value + 'm';
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                navigation: {
+                    activeColor: '#C41232'
+                }
+            },
 
-});
+            tooltip: {
+                crosshairs: true,
+                shared: true
+            },
+
+            plotOptions: {
+                series: {
+                    lineColor: '#C41232'
+                },
+                area: {
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, 'rgba(196, 18, 50, 1)'],
+                            [1, 'rgba(255, 255, 255, 0)']
+                        ]
+                    },
+                    marker: {
+                        radius: 2,
+                        enabled: false
+                    },
+                    lineWidth: 1,
+                    states: {
+                        hover: {
+                            lineWidth: 2
+                        }
+                    },
+                    threshold: null
+                }
+            },
+            series: [{
+                type: 'area',
+                name: 'Dénivelé',
+                data: charts_arrays["graph1"],
+                tooltip: {
+                    pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} m</b><br/>' +
+                    '<span style="font-weight: bold; color: {series.color}">Distance parcourue</span>: <b>{point.x:.1f} m</b><br/> '
+                }
+            }]
+        });
+    });
+}
 
 
 
 // VITESSE/DISTANCE
-
+/*
 $(function () {
 	Highcharts.setOptions({
 		colors: ['#C41232', '#C41232']
@@ -210,10 +240,11 @@ $(function () {
 		}
 		]
 	});
-});
+});*/
 
 
 // FREQ CARDIAQUE/DISTANCE
+/*
 $(function () {
 
 	Highcharts.setOptions({
@@ -312,9 +343,11 @@ $(function () {
 		}
 		]
 	});
-});
+});*/
 
 // FREQ PEDALAGE/DISTANCE
+
+/*
 $(function () {
 	Highcharts.setOptions({
 		colors: ['#C41232', '#C41232']
@@ -412,10 +445,11 @@ $(function () {
 		}
 		]
 	});
-});
+});*/
 
 // FREQ PUISSANCE INSTANTANNEE
-$(function () {
+/*
+    $(function () {
 	Highcharts.setOptions({
 		colors: ['#C41232', '#C41232']
 	});
@@ -484,12 +518,12 @@ $(function () {
         	}
         }]
     });
-});
+});*/
 
 // PENTE EN %
 
 // VITESSE/DISTANCE
-
+/*
 $(function () {
 	Highcharts.setOptions({
 		colors: ['#C41232', '#C41232']
@@ -589,6 +623,7 @@ $(function () {
 	});
 });
 }
+*/
 
 var graphTest = {};
 
