@@ -18,12 +18,12 @@ $lastID = $bdd->lastInsertId();
 
 //get id de la trace courante
 //get la taille de la trace
-$tailleTrace = sizeof($_POST['trace']['altitude']); 
-
+$tailleTrace = sizeof($_POST['trace']['id']); 
 //iteration sur le POST id trace à changer
 for ($i=0; $i < $tailleTrace ; $i++) { 
 	//insertion
-	$bdd->query("INSERT INTO trace VALUES (".$lastID.", ".$_POST['trace']['altitude'][$i].", ".$_POST['trace']['distance'][$i].",".$_POST['trace']['vitesse'][$i].",".$_POST['trace']['freq_cardiaque'][$i].",".$_POST['trace']['delta_temps'][$i].",".$_POST['trace']['puissance'][$i].",".$_POST['trace']['freq_pedalage'][$i].",0);");
+
+	$bdd->query("UPDATE trace SET cacher = 1 WHERE id_trace =".$_POST['trace']['id'][$i]);
 }
-var_dump($_POST["hide"]);
+
 ?>

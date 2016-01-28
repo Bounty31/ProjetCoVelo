@@ -4,145 +4,169 @@ var clicked = 0;
 
 //ALTITUDE/DISTANCE
 function createGraphs(charts_arrays) {
-    $(function () {
-        Highcharts.setOptions({
-            colors: ['#C41232', '#C41232']
-        });
+	$(function () {
+		Highcharts.setOptions({
+			colors: ['#C41232', '#C41232']
+		});
 
-        $('#Graph-1').highcharts({
-            chart: {
-                zoomType: 'x',
-                type: 'spline',
-                events: {
-                    click: function(evt) {
-                        if (editOption) {
-                            var xValue = Math.round(evt.xAxis[0].value);
-                            var xAxis = evt.xAxis[0].axis;
-                            clicked++;
+		$('#Graph-1').highcharts({
+			chart: {
+				zoomType: 'x',
+				type: 'spline',
+				events: {
+					click: function(evt) {
+						if (editOption) {
+							var xValue = Math.round(evt.xAxis[0].value);
+							var xAxis = evt.xAxis[0].axis;
+							clicked++;
 
-                            if (clicked == 1) {
-                                clickedPlotLimits.push(xValue);
-                            }
-                            else if (clicked == 2) {
-                                if (xValue < clickedPlotLimits[0]) {
-                                    clickedPlotLimits.unshift(xValue);
-                                }
-                                else {
-                                    clickedPlotLimits.push(xValue);
-                                }
-                            }
+							if (clicked == 1) {
+								clickedPlotLimits.push(xValue);
+							}
+							else if (clicked == 2) {
+								if (xValue < clickedPlotLimits[0]) {
+									clickedPlotLimits.unshift(xValue);
+								}
+								else {
+									clickedPlotLimits.push(xValue);
+								}
+							}
 
-                            xAxis.addPlotLine({
-                                value: xValue,
-                                width: 2,
-                                color: 'red',
-                                id: "plot"
-                            });
+							xAxis.addPlotLine({
+								value: xValue,
+								width: 2,
+								color: 'red',
+								id: "plot"
+							});
 
-                            if (clicked == 2) {
-                                setTimeout(function() {
-                                    console.log(clickedPlotLimits);
+							if (clicked == 2) {
+								setTimeout(function() {
+									console.log(clickedPlotLimits);
+                                    /*
+                                    ICI appelé quand plot disparaissent
+                                    */
+
+                                    splitArrayUpdate(charts_arrays["data"],clickedPlotLimits);
                                     clickedPlotLimits = [];
 
                                     $.each(xAxis.plotLinesAndBands, function() {
-                                        xAxis.removePlotLine(this.id);
+                                    	xAxis.removePlotLine(this.id);
                                     });
                                     clicked = 0;
                                 }, 1000);
-                            }
+							}
 
-                        }
-                    }
-                }
-            },
-            title: {
-                text: 'Altitude'
-            },
-            subtitle: {
-                text: document.ontouchstart === undefined ?
-                    'Cliquez et laissez enfoncé pour zoomer' : 'Maintenez enfoncé la souris et déplacez la pour zoomer'
-            },
-            xAxis: {
-                type: 'number',
-                title: {
-                    text: 'Distance en mètres'
-                },
-                labels: {
-                    formatter: function () {
-                        return this.value + 'm';
-                    }
-                }
-            },
-            yAxis: {
-                type: 'number',
-                title: {
-                    text: 'Altitude en mètres'
-                },
-                labels: {
-                    formatter: function () {
-                        return this.value + 'm';
-                    }
-                }
-            },
-            legend: {
-                enabled: true,
-                navigation: {
-                    activeColor: '#C41232'
-                }
-            },
+						}
+					}
+				}
+			},
+			title: {
+				text: 'Altitude'
+			},
+			subtitle: {
+				text: document.ontouchstart === undefined ?
+				'Cliquez et laissez enfoncé pour zoomer' : 'Maintenez enfoncé la souris et déplacez la pour zoomer'
+			},
+			xAxis: {
+				type: 'number',
+				title: {
+					text: 'Distance en mètres'
+				},
+				labels: {
+					formatter: function () {
+						return this.value + 'm';
+					}
+				}
+			},
+			yAxis: {
+				type: 'number',
+				title: {
+					text: 'Altitude en mètres'
+				},
+				labels: {
+					formatter: function () {
+						return this.value + 'm';
+					}
+				}
+			},
+			legend: {
+				enabled: true,
+				navigation: {
+					activeColor: '#C41232'
+				}
+			},
 
-            tooltip: {
-                crosshairs: true,
-                shared: true
-            },
+			tooltip: {
+				crosshairs: true,
+				shared: true
+			},
 
-            plotOptions: {
-                series: {
-                    lineColor: '#C41232'
-                },
-                area: {
-                    fillColor: {
-                        linearGradient: {
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 1
-                        },
-                        stops: [
-                            [0, 'rgba(196, 18, 50, 1)'],
-                            [1, 'rgba(255, 255, 255, 0)']
-                        ]
-                    },
-                    marker: {
-                        radius: 2,
-                        enabled: false
-                    },
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 2
-                        }
-                    },
-                    threshold: null
-                }
-            },
-            series: [{
-                type: 'area',
-                name: 'Dénivelé',
-                data: charts_arrays["graph1"],
-                tooltip: {
-                    pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} m</b><br/>' +
-                    '<span style="font-weight: bold; color: {series.color}">Distance parcourue</span>: <b>{point.x:.1f} m</b><br/> '
-                }
-            }]
-        });
-    });
-}
+			plotOptions: {
+				series: {
+					lineColor: '#C41232'
+				},
+				area: {
+					fillColor: {
+						linearGradient: {
+							x1: 0,
+							y1: 0,
+							x2: 0,
+							y2: 1
+						},
+						stops: [
+						[0, 'rgba(196, 18, 50, 1)'],
+						[1, 'rgba(255, 255, 255, 0)']
+						]
+					},
+					marker: {
+						radius: 2,
+						enabled: false
+					},
+					lineWidth: 0,
+					states: {
+						hover: {
+							lineWidth: 2
+						}
+					},
+					threshold: null
+				}
+			},
+			series: [
+			{
+				type: 'area',
+				name: 'Caché',
+				data: charts_arrays["graph1_hidden"],
+				color : '#16a085',
+				tooltip: {
+					pointFormat: '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f} m</b><br/>' +
+					'<span style="font-weight: bold; color: {series.color}">Distance parcourue</span>: <b>{point.x:.1f} m</b><br/> '
+				},
+				fillColor: {
+					linearGradient: {
+						x1: 0,
+						y1: 0,
+						x2: 0,
+						y2: 1
+					},
+					stops: [
+					[0, 'rgba(26, 188, 156,1)'],
+					[1, 'rgba(255, 255, 255, 0)']
+					]
+				}
+			},
+			{
+				type: 'area',
+				name: 'Parcour',
+				data: charts_arrays["graph1"]
 
+			}
 
+			]
+		});
+});
 
 // VITESSE/DISTANCE
-/*
+
 $(function () {
 	Highcharts.setOptions({
 		colors: ['#C41232', '#C41232']
@@ -240,11 +264,11 @@ $(function () {
 		}
 		]
 	});
-});*/
+});
 
 
 // FREQ CARDIAQUE/DISTANCE
-/*
+
 $(function () {
 
 	Highcharts.setOptions({
@@ -343,11 +367,11 @@ $(function () {
 		}
 		]
 	});
-});*/
+});
 
 // FREQ PEDALAGE/DISTANCE
 
-/*
+
 $(function () {
 	Highcharts.setOptions({
 		colors: ['#C41232', '#C41232']
@@ -445,11 +469,11 @@ $(function () {
 		}
 		]
 	});
-});*/
+});
 
 // FREQ PUISSANCE INSTANTANNEE
-/*
-    $(function () {
+
+$(function () {
 	Highcharts.setOptions({
 		colors: ['#C41232', '#C41232']
 	});
@@ -518,12 +542,12 @@ $(function () {
         	}
         }]
     });
-});*/
+});
 
 // PENTE EN %
 
 // VITESSE/DISTANCE
-/*
+
 $(function () {
 	Highcharts.setOptions({
 		colors: ['#C41232', '#C41232']
@@ -622,21 +646,54 @@ $(function () {
 		]
 	});
 });
+
 }
-*/
 
-var graphTest = {};
 
-graphTest["graph1"] =[[1, 65],[2, 72],[3, 80],[4, 82],[5,79],[6,50],[7,37],[8, 38],[9,39],[10,43],[11,44],[12,60],[13,64],[14,65]];
 
-graphTest["graph1_2"] =[[1, 65],[2, 72],[3, 80],[4, 82],[5,79],[6,50],[7,37],[8, 38],[9,39],[10,43],[11,44],[12,60],[13,64],[14,65]];
+function splitArrayUpdate(array,arrayHide){
+	arrayRes = {};
+	var sizeOfQuery = 10;
+	reste = array['altitude'].length%sizeOfQuery;
+	lenght = array['altitude'].length - reste;
+	nbtour = lenght/sizeOfQuery;
+	var distance = 0;
+	for (var i = 0; i < nbtour; i++) {
+		var index = 0;
+		arrayRes = {};
+		arrayRes["id"] = Array();
+		for (var j = 0; j < sizeOfQuery; j++) {
+			index= i*sizeOfQuery+j;
+			distance += parseFloat(array["distance"][index]);
+			if(distance>=arrayHide[0] && distance<=arrayHide[1])
+				arrayRes["id"].push(array["id"][index]);
+		};
+		$.ajax({
+			type: "POST",
+			url: "js/update_trace.php",
+			data: {trace : arrayRes, hide :  arrayHide},
+			success: function() {
+				console.log("serie finie");
+			}
+		});
+	};
 
-graphTest["graph2"] =[[1, 65],[2, 72],[3, 80],[4, 82],[5,79],[6,50],[7,37],[8, 38],[9,39],[10,43],[11,44],[12,60],[13,64],[14,65]];
-
-graphTest["graph3"] =[[1, 65],[2, 72],[3, 80],[4, 82],[5,79],[6,50],[7,37],[8, 38],[9,39],[10,43],[11,44],[12,60],[13,64],[14,65]];
-
-graphTest["graph4"] =[[1, 65],[2, 72],[3, 80],[4, 82],[5,79],[6,50],[7,37],[8, 38],[9,39],[10,43],[11,44],[12,60],[13,64],[14,65]];
-
-graphTest["graph5"] =[[1, 65],[2, 72],[3, 80],[4, 82],[5,79],[6,50],[7,37],[8, 38],[9,39],[10,43],[11,44],[12,60],[13,64],[14,65]];
-
-createGraphs(graphTest);
+	arrayRes = {};
+	arrayRes["id"] = Array();
+	for (var j = 0; j < reste; j++) {
+		index = nbtour*sizeOfQuery+j;
+		distance += parseFloat(array["distance"][index]);
+		if(distance>=arrayHide[0] && distance<=arrayHide[1])
+			arrayRes["id"].push(array["id"][index]);
+	};
+	$.ajax({
+		type: "POST",
+		url: "js/update_trace.php",
+		data: {trace : arrayRes, hide :  arrayHide},
+		success: function() {
+      //action quand tout est chargé
+      alert("finish");
+      loader.classList.add("hidden");
+  }
+});
+}

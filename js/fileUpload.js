@@ -4,7 +4,6 @@
 *Fichier se chargeant de faire l'import du fichier dans la bdd
 *
 */
-
 var file;
 document.getElementById('chooseFile').onchange = function(){
   //prend le fichier uploadé
@@ -18,14 +17,14 @@ function validateFile(){
  loader.classList.remove("hidden");
 
  // file = document.getElementById('chooseFile').files[0];
-  var reader = new FileReader();
-  reader.onload = function(progressEvent){
+ var reader = new FileReader();
+ reader.onload = function(progressEvent){
 
     //decoupage du fichier
     var lines = this.result.split('\n');
     var champs = lines[0].split(";");
-    var divCsv = document.getElementById("displaycsv");
     var donnees = {};
+
 
     //créé une clef et un array associé pour chaque champs
     for (var i = champs.length - 1; i >= 0; i--) {
@@ -56,19 +55,78 @@ function validateFile(){
    tracedata["delta_temps"] = donnees["TrainingTime [s]"];
    tracedata["puissance"] = donnees["Power [Watt]"];
    tracedata["freq_pedalage"] = donnees["Cadence [rpm]"];
-console.log(tracedata);
+   //On decoupe le tableau en sous tableaux de 400 lignes
+   splitArray(tracedata);
   //envoie du tableau à la page php pour insertion bdd
-   $.ajax({
+
+};
+
+reader.readAsText(file);
+}
+
+function splitArray(array){
+  arrayRes = {};
+  var sizeOfQuery = 10;
+  reste = array['altitude'].length%sizeOfQuery;
+  lenght = array['altitude'].length - reste;
+  nbtour = lenght/sizeOfQuery;
+  for (var i = 0; i < nbtour; i++) {
+    var index = 0;
+    arrayRes = {};
+    arrayRes["altitude"] = Array();
+    arrayRes["distance"] = Array();
+    arrayRes["vitesse"] = Array();
+    arrayRes["freq_cardiaque"] = Array();
+    arrayRes["delta_temps"] = Array();
+    arrayRes["puissance"] = Array();
+    arrayRes["freq_pedalage"] = Array();
+    
+    for (var j = 0; j < sizeOfQuery; j++) {
+      index= i*sizeOfQuery+j;
+      arrayRes["altitude"].push(array["altitude"][index]);
+      arrayRes["distance"].push(array["distance"][index]);
+      arrayRes["vitesse"].push(array["vitesse"][index]);
+      arrayRes["freq_cardiaque"].push(array["freq_cardiaque"][index]);
+      arrayRes["delta_temps"].push(array["delta_temps"][index]);
+      arrayRes["puissance"].push(array["puissance"][index]);
+      arrayRes["freq_pedalage"].push(array["freq_pedalage"][index]);
+    };
+    $.ajax({
      type: "POST",
      url: "js/traceFile_to_db.php",
-     data: {trace : tracedata},
+     data: {trace : arrayRes},
      success: function() {
-      //action quand tout est chargé
-          alert("finish");
-         loader.classList.add("hidden");
-        }
-      });
- };
+      console.log("serie finie");
+    }
+  });
+  };
 
- reader.readAsText(file);
+  arrayRes = {};
+  arrayRes["altitude"] = Array();
+  arrayRes["distance"] = Array();
+  arrayRes["vitesse"] = Array();
+  arrayRes["freq_cardiaque"] = Array();
+  arrayRes["delta_temps"] = Array();
+  arrayRes["puissance"] = Array();
+  arrayRes["freq_pedalage"] = Array();
+  for (var j = 0; j < reste; j++) {
+    index = nbtour*sizeOfQuery+j;
+    arrayRes["altitude"].push(array["altitude"][index]);
+    arrayRes["distance"].push(array["distance"][index]);
+    arrayRes["vitesse"].push(array["vitesse"][index]);
+    arrayRes["freq_cardiaque"].push(array["freq_cardiaque"][index]);
+    arrayRes["delta_temps"].push(array["delta_temps"][index]);
+    arrayRes["puissance"].push(array["puissance"][index]);
+    arrayRes["freq_pedalage"].push(array["freq_pedalage"][index]);
+  };
+  $.ajax({
+   type: "POST",
+   url: "js/traceFile_to_db.php",
+   data: {trace : arrayRes},
+   success: function() {
+      //action quand tout est chargé
+      alert("finish");
+      loader.classList.add("hidden");
+    }
+  });
 }
