@@ -8,7 +8,7 @@ $('#chooseFile').bind('change', function () {
 
     else {
         $("#traceModalName").addClass('in');
-        $("#traceModalName").css('display','block');
+        $("#traceModalName").css('display', 'block');
         $("body").addClass('modal-open');
         $(".file-upload").addClass('active');
         $("#Send-file").removeClass('hidden');
@@ -16,10 +16,10 @@ $('#chooseFile').bind('change', function () {
     }
 });
 
-$(document).ready(function(){
-    $("#modalAction #dismissFileModal").on('click', function(){
+$(document).ready(function () {
+    $("#modalAction #dismissFileModal").on('click', function () {
         $("#traceModalName").removeClass('in');
-        $("#traceModalName").css('display','none');
+        $("#traceModalName").css('display', 'none');
         $("body").removeClass('modal-open');
         $(".file-upload").removeClass('active');
         $("#Send-file").addClass('hidden');
