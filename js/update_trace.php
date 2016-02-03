@@ -21,5 +21,3 @@ for ($i = 0; $i < $tailleTrace; $i++) {
     //insertion
     $bdd->query("UPDATE trace SET cacher = 1 WHERE id_trace =" . $_POST['trace']['id'][$i]);
 }
-
-?>
