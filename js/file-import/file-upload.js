@@ -1,8 +1,8 @@
 /*
  *Fichier se chargeant de faire l'import du fichier dans la BDD
-*/
+ */
 
-function validateFile() {
+ function validateFile() {
     var loader = document.getElementById("loader");
     loader.classList.remove("hidden");
 
@@ -14,10 +14,9 @@ function validateFile() {
 
     $.ajax({
         type: "POST",
-        url: "PHP/optimizedImport.php",
-        data: {fileName: fileName, traceName : traceName},
+        url: "PHP/functions.php",
+        data: {query : "upload",fileName: fileName, traceName : traceName},
         success: function () {
-            console.log("Fichier chargé");
 
             loader.classList.add("hidden");
             location.reload();
