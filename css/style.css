@@ -82,6 +82,8 @@ body {
 
 }
 
+.highcharts-container{ width: 100% ! important;}
+
 @media (min-width: 1200px) {
     .Graph{
         min-width: 950px;
