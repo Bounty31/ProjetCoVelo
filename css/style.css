@@ -151,3 +151,36 @@ body {
     }
 }
 
+.multiselect {
+    margin-top:10px;
+    width: 100%;
+}
+.selectBox {
+    position: relative;
+}
+.selectBox select {
+    width: 100%;
+    font-weight: bold;
+}
+.overSelect {
+    position: absolute;
+    left: 0; right: 0; top: 0; bottom: 0;
+}
+#checkboxes, #checkboxes2 {
+    display: none;
+    border: 1px #dadada solid;
+    background-color: #fff;
+}
+#checkboxes label, #checkboxes2 label {
+    display: block;
+}
+
+#checkboxes label:hover, #checkboxes2 label:hover {
+    background-color: #1e90ff;
+}
+
+.list-group-item {
+    background-color: transparent !important;
+    border: none;
+}
+

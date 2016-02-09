@@ -61,6 +61,7 @@ function createGraphs(charts_arrays) {
                     }
                 }
             },
+
             title: {
                 text: 'Altitude'
             },
@@ -138,6 +139,7 @@ function createGraphs(charts_arrays) {
                     threshold: null
                 }
             },
+
             series: [
                 {
                     type: 'area',

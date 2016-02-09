@@ -262,10 +262,55 @@
                           <li class="list-group-item">
                               <h4>&nbsp; &nbsp;<span class="badge pull-right">21/10/15</span></h4>
                               <div class="Graph" id="Graph-1">
-
                               </div>
                           </li>
-                          <li class="list-group-item">
+                          <li>
+                              <div class="col-xs-12">
+                                  <div class="selectTypeDonnee col-sm-4 col-xs-12">
+                                      <div class="multiselect">
+                                          <div class="selectBox" onclick="showDataType()">
+                                              <select>
+                                                  <option>Type de données</option>
+                                              </select>
+                                              <div class="overSelect"></div>
+                                          </div>
+                                          <div id="checkboxes">
+                                              <label id="label-1-a"><input type="checkbox" id="checkboxe-1-a"/>Altitude</label>
+                                              <label id="label-2-a"><input type="checkbox" id="checkboxe-2-a"/>Vitesse </label>
+                                              <label id="label-3-a"><input type="checkbox" id="checkboxe-3-a"/>Fréquence cardiaque</label>
+                                              <label id="label-4-a"><input type="checkbox" id="checkboxe-4-a"/>Fréquence pédalage</label>
+                                              <label id="label-5-a"><input type="checkbox" id="checkboxe-5-a"/>Pente</label>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="selectSections col-sm-4 col-xs-12">
+                                      <div class="multiselect">
+                                          <div class="selectBox" onclick="showSelectSections()">
+                                              <select>
+                                                  <option>Sections</option>
+                                                  </select>
+                                              <div class="overSelect"></div>
+                                          </div>
+                                          <div id="checkboxes2">
+                                              <label id="label-1-b"><input type="checkbox" id="checkboxe-1-b"/>Section 1</label>
+                                              <label id="label-2-b"><input type="checkbox" id="checkboxe-2-b"/>Section 2</label>
+                                              <label id="label-3-b"><input type="checkbox" id="checkboxe-3-b"/>Section 3</label>
+                                              <label id="label-4-b"><input type="checkbox" id="checkboxe-4-b"/>Section 4</label>
+                                              </div>
+                                          </div>
+
+
+                                  </div>
+                                  <div class="mode col-sm-4 col-xs-12">
+                                      <div class="checkbox pull-right">
+                                          <label>
+                                              <input id="editionMode" type="checkbox"> Mode édition
+                                          </label>
+                                      </div>
+                                  </div>
+                              </div>
+                          </li>
+                         <!-- <li class="list-group-item">
                               <h4>&nbsp; &nbsp;<span class="badge pull-right">21/10/15</span></h4>
                               <div class="Graph" id="Graph-2">
 
@@ -294,7 +339,7 @@
                               <div class="Graph" id="Graph-6">
 
                               </div>
-                          </li>
+                          </li>-->
                       </ul>
                   </div>
                   <!-- END GRAPHICS CURVES -->
