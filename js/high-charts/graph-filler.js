@@ -1,6 +1,12 @@
-$.ajax({                                      
-    url: 'js/db_to_trace.php',
-    dataType: 'json',
+function displayGraphs(){
+
+
+    $.ajax({                     
+        type :"POST",
+        url: 'PHP/functions.php',
+        data: {query:"download"},
+
+        dataType: 'json',
         success: function(data)     //on recieve of reply
         {   
             //creation du tableau
@@ -40,3 +46,4 @@ $.ajax({
         createGraphs(graphTest);
     } 
 });
+}
