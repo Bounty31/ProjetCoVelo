@@ -2,8 +2,8 @@ var clickedPlotLimits = [];
 var editOption = true;
 var clicked = 0;
 
-//ALTITUDE/DISTANCE
-function createGraphs(charts_arrays) {
+
+function createGraphe(charts_arrays) {
     $(function () {
         Highcharts.setOptions({
             colors: ['#C41232', '#C41232']
@@ -15,7 +15,7 @@ function createGraphs(charts_arrays) {
                 type: 'spline',
                 events: {
                     click: function (evt) {
-                        if (editOption) {
+                        /*if (editOption) {
                             var xValue = evt.xAxis[0].value;
                             var xAxis = evt.xAxis[0].axis;
                             clicked++;
@@ -48,7 +48,7 @@ function createGraphs(charts_arrays) {
                                     color: '#FCFFC5',
                                     id: 'plotband'
                                 });
-                                /* ICI appelé quand plot disparaissent */
+                                /!* ICI appelé quand plot disparaissent *!/
 
                                 splitArrayUpdate(charts_arrays["data"], clickedPlotLimits, xAxis);
                                 clickedPlotLimits = [];
@@ -57,7 +57,7 @@ function createGraphs(charts_arrays) {
                                 clicked = 0;
                             }
 
-                        }
+                        }*/
                     }
                 }
             },
@@ -103,12 +103,10 @@ function createGraphs(charts_arrays) {
                     activeColor: '#C41232'
                 }
             },
-
             tooltip: {
                 crosshairs: true,
                 shared: true
             },
-
             plotOptions: {
                 series: {
                     lineColor: '#C41232'
@@ -139,7 +137,6 @@ function createGraphs(charts_arrays) {
                     threshold: null
                 }
             },
-
             series: [
                 {
                     type: 'area',
@@ -662,4 +659,4 @@ function grapheUpdateCallback(xAxis) {
         xAxis.removePlotLine(this.id);
     });
 }
-displayGraphs();
+//displayGraphs();
