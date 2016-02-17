@@ -106,6 +106,14 @@ function updateGraphe() {
         chart.series[0].remove( false );
     }
 
+    for (var i = 0; i < 2; i++) {
+        chart.yAxis[i].update({
+            title: {
+                text: ''
+            }
+        });
+    }
+
     if ($.inArray("altitude", optionsArray) != -1) {
         chart.yAxis[axisIndex].update({
             type: 'number',
