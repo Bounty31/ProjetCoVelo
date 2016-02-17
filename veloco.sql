@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Jeu 28 Janvier 2016 à 07:17
+-- Généré le :  Mer 17 Février 2016 à 12:23
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -23,20 +23,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `trace`
+-- Structure de la table `trace_1`
 --
 
-CREATE TABLE IF NOT EXISTS `trace` (
-  `id_trace` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `trace_1` (
+  `id_point` int(11) NOT NULL,
   `altitude` float NOT NULL,
   `distance` float NOT NULL,
   `vitesse` float NOT NULL,
   `freq_cardiaque` float NOT NULL,
   `delta_temps` float NOT NULL,
   `puissance` float NOT NULL,
-  `freq_pedalage` float NOT NULL,
-  `cacher` tinyint(4) NOT NULL DEFAULT '0'
+  `freq_pedalage` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+
 
 -- --------------------------------------------------------
 
@@ -45,9 +47,19 @@ CREATE TABLE IF NOT EXISTS `trace` (
 --
 
 CREATE TABLE IF NOT EXISTS `trace_id` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
+  `nom_table` varchar(50) NOT NULL,
+  `nom_parcours` varchar(50) NOT NULL,
+  `date` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `trace_id`
+--
+
+INSERT INTO `trace_id` (`id`, `nom_table`, `nom_parcours`, `date`) VALUES
+(0, 'trace_1', 'parcours Salbert', '2016-02-18');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
