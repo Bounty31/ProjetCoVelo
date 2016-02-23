@@ -1,10 +1,8 @@
 <?php
-try
-{
+try {
 	$bdd = new PDO('mysql:host=localhost;dbname=veloco;charset=utf8', 'root', '');
 }
-catch (Exception $e)
-{
+catch (Exception $e) {
 	die('Erreur : ' . $e->getMessage());
 }
 
@@ -21,19 +19,47 @@ if(isset($_POST["query"])){
 function upload($bdd){
 	$fileName = $_POST["fileName"];
 	$traceName = $_POST["traceName"];
+    $date = $_POST["date"];
+
+    // Insertion dans trace_id
+    $sql = "INSERT INTO trace_id (id, nom_parcours, date) VALUES (NULL, '" . $traceName . "', '" . $date . "')";
+    $bdd->query($sql);
+
+    // Récupération de la dernière table
+    $sql = "SELECT * FROM trace_id ORDER BY id DESC LIMIT 1";
+    $resultat = $bdd->query($sql);
+    $lastRow = $resultat->fetch();
+    $nomTable = "trace_" . $lastRow["id"];
+
+    // Création de la nouvelle table
+    $sql = "CREATE TABLE IF NOT EXISTS " . $nomTable . " (
+    id_point int(11) NOT NULL,
+    altitude float NOT NULL,
+    distance float NOT NULL,
+    vitesse float NOT NULL,
+    freq_cardiaque float NOT NULL,
+    delta_temps float NOT NULL,
+    puissance float NOT NULL,
+    freq_pedalage float NOT NULL,
+    latitude float NOT NULL ,
+    longitude float NOT NULL,
+    PRIMARY KEY (id_point))";
+    $bdd->query($sql);
+
 
 	$absolutePath = realpath(dirname(__FILE__)) . "\\..\\data\\test_data\\" . $fileName;
 	$path = str_replace('\\', '/', $absolutePath);
 
-	$sql = "LOAD DATA INFILE '" . $path . "' INTO TABLE trace
+	$sql = "LOAD DATA INFILE '" . $path . "' INTO TABLE " . $nomTable . "
 	FIELDS TERMINATED BY ';'
 	LINES TERMINATED BY '\\r\\n'
 	IGNORE 1 LINES
-	(id_trace,altitude,@dummy,@dummy,freq_pedalage,@dummy,@dummy,distance,@dummy,@dummy,
-		freq_cardiaque,@dummy,@dummy,@dummy,@dummy,@dummy,puissance,@dummy,@dummy,vitesse,
+	(id_point,altitude,@dummy,@dummy,freq_pedalage,@dummy,@dummy,distance,@dummy,@dummy,
+		freq_cardiaque,@dummy,@dummy,latitude,longitude,@dummy,puissance,@dummy,@dummy,vitesse,
 		@dummy,@dummy,@dummy,@dummy,delta_temps,@dummy,@dummy,@dummy,@dummy,@dummy)";
 
-$bdd->query($sql);
+    $bdd->query($sql);
+    echo $sql;
 }
 
 // download trace

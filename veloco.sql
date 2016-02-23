@@ -23,24 +23,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `trace_1`
---
-
-CREATE TABLE IF NOT EXISTS `trace_1` (
-  `id_point` int(11) NOT NULL AUTO_INCREMENT,
-  `altitude` float NOT NULL,
-  `distance` float NOT NULL,
-  `vitesse` float NOT NULL,
-  `freq_cardiaque` float NOT NULL,
-  `delta_temps` float NOT NULL,
-  `puissance` float NOT NULL,
-  `freq_pedalage` float NOT NULL,
-  PRIMARY KEY (`id_point`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `trace_id`
 --
 
@@ -55,8 +37,6 @@ CREATE TABLE IF NOT EXISTS `trace_id` (
 -- Contenu de la table `trace_id`
 --
 
-INSERT INTO `trace_id` (`id`, `nom_parcours`, `date`) VALUES
-(1, 'parcours Salbert', '2016-02-18');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
