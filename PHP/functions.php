@@ -3,10 +3,10 @@ try {
 	$bdd = new PDO('mysql:host=localhost;dbname=veloco;charset=utf8', 'root', '');
 }
 catch (Exception $e) {
-	die('Erreur : ' . $e->getMessage());
+	die('Erreur : ' . $e -> getMessage());
 }
 
-if(isset($_POST["query"])){
+if(isset($_POST["query"])) {
 	if($_POST["query"] == "download")
 		download($bdd);
 	else if($_POST["query"] == "upload")
@@ -62,10 +62,13 @@ function upload($bdd){
     echo $sql;
 }
 
-// download trace
-function download($bdd){
+// Téléchargement de la trace
+function download($bdd) {
+    // ########### A modifier #############
+	$idTrade = 1;
 
-	$result = $bdd->query("SELECT * FROM trace");
+    $sql = "SELECT * FROM trace_" . $idTrade;
+	$result = $bdd->query($sql);
 	$data = [];
 
 	$id = [];
@@ -76,10 +79,11 @@ function download($bdd){
 	$delta_temps = [];
 	$puissance = [];
 	$freq_pedalage = [];
-	$cacher = [];
+	$latitude = [];
+	$longitude = [];
 
 	while($row = $result->fetch()) {
-		$id[] = $row["id_trace"];
+		$id[] = $row["id_point"];
 		$altitude[] = $row["altitude"];
 		$distance[] = $row["distance"];
 		$vitesse[] = $row["vitesse"];
@@ -87,11 +91,11 @@ function download($bdd){
 		$delta_temps[] = $row["delta_temps"];
 		$puissance[] = $row["puissance"];
 		$freq_pedalage[] = $row["freq_pedalage"];
-		$cacher[] = $row["cacher"];
-
+        $latitude[] = $row["latitude"];
+        $longitude[] = $row["longitude"];
 	}
 
-	$data["id"] = $id;
+	$data["id_point"] = $id;
 	$data["altitude"] = $altitude;
 	$data["distance"] = $distance;
 	$data["vitesse"] = $vitesse;
@@ -99,8 +103,8 @@ function download($bdd){
 	$data["delta_temps"] = $delta_temps;
 	$data["puissance"] = $puissance;
 	$data["freq_pedalage"] = $freq_pedalage;
-	$data["cacher"] = $cacher;
+	$data["latitude"] = $latitude;
+	$data["longitude"] = $longitude;
 
 	echo json_encode($data);
 }
-?>

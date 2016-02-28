@@ -3,6 +3,10 @@ var chartOptions;
 var chart_data;
 var axisIndex = 0;
 var oppositeBool = false;
+var editState = false;
+var numberPlotLines = 0;
+var markers = [];
+var sections;
 
 // Colors for both series
 var colors = ["#C41232", "#0E79DC"];
@@ -22,14 +26,7 @@ function initGraphe() {
         chart: {
             zoomType: 'x',
             renderTo: 'Graph-1',
-            type: 'spline',
-            events: {
-                click: function (evt) {
-                    /*if (editOption) {
-                     var xValue = evt.xAxis[0].value;
-                     var xAxis = evt.xAxis[0].axis;*/
-                }
-            }
+            type: 'spline'
         },
         title: {
             text: 'Altitude'
@@ -72,8 +69,50 @@ function initGraphe() {
     });
 }
 
+function makeSections() {
+    sections = [];
+    var min = 0;
+    var max = chart_data["altitude"].length;
+    markers.sort(function(a, b){return a-b});
+
+    for (var i = 0; i < markers.length + 1; i++) {
+        if (i == 0) {
+            sections.push([min, markers[i]]);
+        }
+        else if (i == markers.length) {
+            sections.push([markers[i-1], max]);
+        }
+        else {
+            sections.push([markers[i-1], markers[i]]);
+        }
+    }
+    console.log(sections);
+}
+
 function addSerie(name, dataName) {
     chart.addSeries({
+        events: {
+            click: function(evt) {
+                if (editState) {
+                    var xValue = evt.point.x;
+                    var pointIndex = evt.point.index;
+
+                    var plotId = "plotline-" + numberPlotLines;
+
+                    markers.push(pointIndex);
+                    makeSections();
+                    //console.log("Adding plot line : " + plotId);
+                    chart.xAxis[0].addPlotLine({
+                        value: xValue,
+                        width: 2,
+                        color: 'red',
+                        id: plotId
+                    });
+
+                    numberPlotLines += 1;
+                }
+
+            }},
         name: name,
         type: 'area',
         color: colors[axisIndex],
@@ -240,6 +279,8 @@ function getGrapheData() {
             var freq_cardiaque = [];
             var puissance = [];
             var freq_pedalage = [];
+            var latitude = [];
+            var longitude = [];
             var distance = 0;
 
             for (var i = 0; i < data["altitude"].length; i++) {
@@ -250,6 +291,8 @@ function getGrapheData() {
                 freq_cardiaque.push([distance, parseInt(data["freq_cardiaque"][i])]);
                 puissance.push([distance, parseInt(data["puissance"][i])]);
                 freq_pedalage.push([distance, parseInt(data["freq_pedalage"][i])]);
+                latitude.push([distance, parseInt(data["latitude"][i])]);
+                longitude.push([distance, parseInt(data["longitude"][i])]);
             }
 
             chart_data = {
@@ -257,8 +300,10 @@ function getGrapheData() {
                 vitesse : vitesse,
                 freq_cardiaque : freq_cardiaque,
                 puissance : puissance,
-                freq_pedalage : freq_pedalage
-            }
+                freq_pedalage : freq_pedalage,
+                latitude : latitude,
+                longitude : longitude
+            };
 
             //console.log(chart_data);
             initGraphe();
