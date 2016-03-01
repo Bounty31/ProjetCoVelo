@@ -321,25 +321,9 @@
                                         <option value="puissance">Puissance</option>
                                     </select>
                                 </div>
-                                <div class="selectSections col-sm-4 col-xs-12">
-                                    <!--<div class="multiselect">
-                                        <div class="selectBox" onclick="showSelectSections()">
-                                            <select>
-                                                <option>Sections</option>
-                                            </select>
-                                            <div class="overSelect"></div>
-                                        </div>
-                                        <div id="checkboxes2">
-                                            <label id="label-1-b"><input type="checkbox" id="checkboxe-1-b"/>Section
-                                                1</label>
-                                            <label id="label-2-b"><input type="checkbox" id="checkboxe-2-b"/>Section
-                                                2</label>
-                                            <label id="label-3-b"><input type="checkbox" id="checkboxe-3-b"/>Section
-                                                3</label>
-                                            <label id="label-4-b"><input type="checkbox" id="checkboxe-4-b"/>Section
-                                                4</label>
-                                        </div>
-                                    </div>-->
+                                <div class="col-sm-4 col-xs-12">
+                                    <select id="selectSections" name="selectSections" multiple="multiple">
+                                    </select>
                                 </div>
                                 <div class="mode col-sm-4 col-xs-12">
                                     <div class="checkbox pull-right">
@@ -391,9 +375,9 @@
 <!-- START JS -->
 <script src="js/file-import/file-upload.js"></script>
 <script src="js/calendar/calendar.js"></script>
-<!--<script src="js/high-charts/custom-graphs.js"></script>-->
 <script src="js/file-import/file-import.js"></script>
-<script src="js/high-charts/graph-filler.js"></script>
+<script src="js/uiElements.js"></script>
+<script src="js/high-charts/graphe.js"></script>
 <script src="js/index.js"></script>
 <!-- END JS -->
 </html>

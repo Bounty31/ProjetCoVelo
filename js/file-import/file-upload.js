@@ -8,9 +8,9 @@ function validateFile() {
 
     var fileName = $("#noFile").text();
     var traceName = $("#traceName").val();
-    var date = "2016-02-18";
+    var date = $("#traceDate").val();
 
-    console.log({fileName: fileName, traceName: traceName});
+    console.log({fileName: fileName, traceName: traceName, traceDate: date});
 
     $.ajax({
         type: "POST",
@@ -23,7 +23,7 @@ function validateFile() {
         },
         success: function () {
             loader.classList.add("hidden");
-            //location.reload();
+            location.reload();
         }
     });
 }

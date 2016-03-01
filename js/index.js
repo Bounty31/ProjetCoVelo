@@ -2,7 +2,7 @@ $(document).ready(function () {
     // Default visu mode
     $(".editionSections").hide();
 
-    var $selectDonnees = $("#selectTypeDonnee").multiselect({
+    var selectDonnees = $("#selectTypeDonnee").multiselect({
         header: false,
         selectedList: 2,
         click: function(event, ui){
@@ -20,18 +20,23 @@ $(document).ready(function () {
                     optionsArray.splice( $.inArray(ui.value, optionsArray) ,1 );
                 }
 
-                updateGraphe();
+                updateGraph();
             }
         }
     });
 
+    var selectSections = $("#selectSections").multiselect({
+        header: "Cocher les sections à afficher"
+    });
+
     var selectSectionsEdit = $("#selectSectionsEdit").multiselect({
-        header: false
+        header: "Cocher les sections à supprimer"
     });
 
     $("#editionMode").click(function() {
         editState = !editState;
-        $selectDonnees.multiselect(editState ? 'disable' : 'enable');
+        selectDonnees.multiselect(editState ? 'disable' : 'enable');
+        selectSections.multiselect(editState ? 'disable' : 'enable');
 
         if ($("#editionMode").is(":checked")) {
             console.log("Mode d'édition");
@@ -60,11 +65,30 @@ $(document).ready(function () {
 
         numberPlotLines = 0;
         markers = [];
-        $("#selectSectionsEdit").multiselect("refresh");
+        sections = [];
+        updateSectionEdit();
     });
 
     $("#saveMarkers").click(function() {
         // Saving markers
+        var array_of_checked_values = $("#selectSectionsEdit").multiselect("getChecked").map(function(){
+            return this.value;
+        }).get();
+
+        $.ajax({
+            type: "POST",
+            url: 'PHP/functions.php',
+            data: {
+                query: "uploadSections",
+                sections: sections,
+                hiddenSectionIndexes: array_of_checked_values,
+                traceId: currentTraceId
+            },
+            dataType: 'json',
+            success: function () {
+                console.log("Saved sections to db");
+            }
+        });
     });
 
 });

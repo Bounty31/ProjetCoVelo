@@ -6,7 +6,8 @@ var oppositeBool = false;
 var editState = false;
 var numberPlotLines = 0;
 var markers = [];
-var sections;
+var sections = [];
+var currentTraceId = 1;
 
 // Colors for both series
 var colors = ["#C41232", "#0E79DC"];
@@ -19,7 +20,7 @@ var fillColors = {
 // Default chart options
 var optionsArray = ["altitude", "vitesse"];
 
-function initGraphe() {
+function initializeGraph() {
     console.log("Initializing chart");
 
     chartOptions = {
@@ -69,26 +70,6 @@ function initGraphe() {
     });
 }
 
-function makeSections() {
-    sections = [];
-    var min = 0;
-    var max = chart_data["altitude"].length;
-    markers.sort(function(a, b){return a-b});
-
-    for (var i = 0; i < markers.length + 1; i++) {
-        if (i == 0) {
-            sections.push([min, markers[i]]);
-        }
-        else if (i == markers.length) {
-            sections.push([markers[i-1], max]);
-        }
-        else {
-            sections.push([markers[i-1], markers[i]]);
-        }
-    }
-    console.log(sections);
-}
-
 function addSerie(name, dataName) {
     chart.addSeries({
         events: {
@@ -102,6 +83,7 @@ function addSerie(name, dataName) {
                     markers.push(pointIndex);
                     makeSections();
                     //console.log("Adding plot line : " + plotId);
+
                     chart.xAxis[0].addPlotLine({
                         value: xValue,
                         width: 2,
@@ -110,6 +92,7 @@ function addSerie(name, dataName) {
                     });
 
                     numberPlotLines += 1;
+                    updateSectionEdit();
                 }
 
             }},
@@ -135,7 +118,7 @@ function addSerie(name, dataName) {
     oppositeBool = true;
 }
 
-function updateGraphe() {
+function updateGraph() {
     console.log("Updating graphe");
 
     axisIndex = 0;
@@ -267,13 +250,17 @@ function updateGraphe() {
     chart.redraw();
 }
 
-function getGrapheData() {
+function initializeSequence() {
     $.ajax({
         type: "POST",
         url: 'PHP/functions.php',
-        data: {query: "download"},
+        data: {
+            query: "download",
+            traceId: currentTraceId
+        },
         dataType: 'json',
         success: function (data) {
+            // Get graph data
             var altitude = [];
             var vitesse = [];
             var freq_cardiaque = [];
@@ -281,10 +268,10 @@ function getGrapheData() {
             var freq_pedalage = [];
             var latitude = [];
             var longitude = [];
-            var distance = 0;
+            var distance;
 
             for (var i = 0; i < data["altitude"].length; i++) {
-                distance += parseFloat(data["distance"][i]);
+                distance = parseFloat(data["distance"][i]);
 
                 altitude.push([distance, parseInt(data["altitude"][i])]);
                 vitesse.push([distance, parseInt(data["vitesse"][i])]);
@@ -306,12 +293,16 @@ function getGrapheData() {
             };
 
             //console.log(chart_data);
-            initGraphe();
-            updateGraphe()
+            initializeGraph();
+            updateGraph();
+
+            // UI elements
+            createSectionEdit();
         }
     });
 }
 
+
 $(document).ready(function () {
-    getGrapheData();
+    initializeSequence();
 });
