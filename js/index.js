@@ -26,7 +26,15 @@ $(document).ready(function () {
     });
 
     var selectSections = $("#selectSections").multiselect({
-        header: "Cocher les sections à afficher"
+        header: "Cocher les sections à cacher",
+        click: function(event, ui){
+            var array_of_checked_values = $("#selectSections").multiselect("getChecked").map(function(){
+                return this.value;
+            }).get();
+
+            hiddenVisuSections = array_of_checked_values;
+            updateGraph();
+        }
     });
 
     var selectSectionsEdit = $("#selectSectionsEdit").multiselect({
@@ -41,6 +49,7 @@ $(document).ready(function () {
         if ($("#editionMode").is(":checked")) {
             console.log("Mode d'édition");
 
+            updateGraph();
             $(".editionSections").show();
 
             chart.zoom();
@@ -49,6 +58,7 @@ $(document).ready(function () {
         else {
             console.log("Mode de visualisation");
 
+            updateGraph();
             $(".editionSections").hide();
             chart.pointer.zoomX = true;
         }
@@ -84,9 +94,16 @@ $(document).ready(function () {
                 hiddenSectionIndexes: array_of_checked_values,
                 traceId: currentTraceId
             },
-            dataType: 'json',
             success: function () {
                 console.log("Saved sections to db");
+                sections = [];
+                markers = [];
+                hiddenSections = [];
+                shownSections = [];
+                hiddenVisuSections = [];
+
+                $("#selectSectionsEdit").empty();
+                createSectionEdit();
             }
         });
     });

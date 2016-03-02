@@ -7,13 +7,16 @@ var editState = false;
 var numberPlotLines = 0;
 var markers = [];
 var sections = [];
+var hiddenSections;
+var shownSections;
+var hiddenVisuSections;
 var currentTraceId = 1;
 
 // Colors for both series
 var colors = ["#C41232", "#0E79DC"];
 var fillColors = {
-    0 : ["rgba(196, 18, 50, 1)", "rgba(196, 18, 50, 0.2)"],
-    1 : ["rgba(14, 121, 220, 1)", "rgba(14, 121, 220, 0.2)"]
+    0: ["rgba(196, 18, 50, 1)", "rgba(196, 18, 50, 0.2)"],
+    1: ["rgba(14, 121, 220, 1)", "rgba(14, 121, 220, 0.2)"]
 };
 
 // Options : altitude, vitesse, freq_cardiaque, puissance, freq_pedalage
@@ -21,7 +24,7 @@ var fillColors = {
 var optionsArray = ["altitude", "vitesse"];
 
 function initializeGraph() {
-    console.log("Initializing chart");
+    console.log("- Initializing chart");
 
     chartOptions = {
         chart: {
@@ -36,7 +39,7 @@ function initializeGraph() {
             text: document.ontouchstart === undefined ?
                 'Cliquez et laissez enfoncé pour zoomer' : 'Maintenez enfoncé la souris et déplacez la pour zoomer'
         },
-        yAxis: [{},{}],
+        yAxis: [{}, {}],
         legend: {
             enabled: true,
             navigation: {
@@ -71,9 +74,11 @@ function initializeGraph() {
 }
 
 function addSerie(name, dataName) {
+    var filteredSerie = filtreSerie(dataName);
+
     chart.addSeries({
         events: {
-            click: function(evt) {
+            click: function (evt) {
                 if (editState) {
                     var xValue = evt.point.x;
                     var pointIndex = evt.point.index;
@@ -95,7 +100,8 @@ function addSerie(name, dataName) {
                     updateSectionEdit();
                 }
 
-            }},
+            }
+        },
         name: name,
         type: 'area',
         color: colors[axisIndex],
@@ -109,23 +115,101 @@ function addSerie(name, dataName) {
             stops: [
                 [0, fillColors[axisIndex][0]],
                 [1, fillColors[axisIndex][1]]
-            ]},
+            ]
+        },
         yAxis: axisIndex,
-        data: chart_data[dataName]
+        data: filteredSerie
     }, false);
 
     axisIndex += 1;
     oppositeBool = true;
 }
 
+function filtreSerie(dataName) {
+    var filteredData = [];
+    var max = chart_data["altitude"].length - 1;
+
+    if (!editState) {
+        for (var i = 0; i < max; i++) {
+            var hiddenPoint = false;
+
+            if (hiddenSections != undefined && hiddenSections.length > 0) {
+                for (var j = 0; j < hiddenSections.length; j++) {
+                    if (i >= hiddenSections[j][0] && i < hiddenSections[j][1]) {
+                        hiddenPoint = true;
+                    }
+                }
+            }
+            if (hiddenVisuSections != undefined && hiddenVisuSections.length > 0) {
+                for (var l = 0; l < hiddenVisuSections.length; l++) {
+                    if (i >= shownSections[hiddenVisuSections[l]][0] && i < shownSections[hiddenVisuSections[l]][1]) {
+                        hiddenPoint = true;
+                    }
+                }
+            }
+
+            if (!hiddenPoint) {
+                filteredData.push(chart_data[dataName][i]);
+            }
+        }
+        return filteredData;
+    }
+    else {
+        return chart_data[dataName];
+    }
+}
+/*
+function inHiddenSectionCheck(index) {
+    for (var j = 0; j < hiddenSections.length; j++) {
+        if (index >= hiddenSections[j][0] && index <= hiddenSections[j][1]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function filtreSerie(dataName) {
+    var filteredData = [];
+    var max = chart_data["altitude"].length - 1;
+    var indexPoint = 0;
+    var currentDataIndex = 0;
+    var oneTime = false;
+
+    if (!editState && hiddenSections != undefined) {
+        while (indexPoint < max) {
+            if (inHiddenSectionCheck(indexPoint)) {
+                if (!oneTime) {
+                    currentDataIndex = indexPoint;
+                    oneTime = true;
+                    console.log("+ Adding index : " + currentDataIndex);
+                }
+            }
+            else {
+                oneTime = false;
+                filteredData.push([currentDataIndex, chart_data[dataName][indexPoint][1]]);
+                currentDataIndex += 1;
+            }
+
+            indexPoint += 1;
+        }
+
+    }
+    else {
+        return chart_data[dataName];
+    }
+
+    return filteredData;
+}*/
+
 function updateGraph() {
-    console.log("Updating graphe");
+    console.log("- Updating graphe");
 
     axisIndex = 0;
     oppositeBool = false;
 
-    while( chart.series.length > 0 ) {
-        chart.series[0].remove( false );
+    while (chart.series.length > 0) {
+        chart.series[0].remove(false);
     }
 
     for (var i = 0; i < 2; i++) {
@@ -283,18 +367,17 @@ function initializeSequence() {
             }
 
             chart_data = {
-                altitude : altitude,
-                vitesse : vitesse,
-                freq_cardiaque : freq_cardiaque,
-                puissance : puissance,
-                freq_pedalage : freq_pedalage,
-                latitude : latitude,
-                longitude : longitude
+                altitude: altitude,
+                vitesse: vitesse,
+                freq_cardiaque: freq_cardiaque,
+                puissance: puissance,
+                freq_pedalage: freq_pedalage,
+                latitude: latitude,
+                longitude: longitude
             };
 
             //console.log(chart_data);
             initializeGraph();
-            updateGraph();
 
             // UI elements
             createSectionEdit();

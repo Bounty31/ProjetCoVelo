@@ -15,8 +15,6 @@ if (isset($_POST["query"])) {
         uploadSections();
     else if ($_POST["query"] == "getAllSections")
         getAllSections();
-    else if ($_POST["query"] == "getSections")
-        getSections();
     else
         echo "erreur";
 }
@@ -169,6 +167,7 @@ function uploadSections()
         }
 
         $bdd->query($sql);
+        echo "Done";
     }
 }
 
@@ -194,27 +193,10 @@ function getAllSections() {
     $data["fin"] = $fin;
     $data["cacher"] = $cacher;
 
-    echo json_encode($data);
-}
-
-function getSections() {
-    global $bdd;
-    $id = $_POST["traceId"];
-    $sql = "SELECT * FROM sections_" . $id . " WHERE cacher=0";
-
-    $result = $bdd->query($sql);
-    $data = [];
-
-    $debut = [];
-    $fin = [];
-
-    while ($row = $result->fetch()) {
-        $debut[] = $row["debut"];
-        $fin[] = $row["fin"];
+    if (empty($data)) {
+        echo json_encode (json_decode ("{}"));
     }
-
-    $data["debut"] = $debut;
-    $data["fin"] = $fin;
-
-    echo json_encode($data);
+    else {
+        echo json_encode($data);
+    }
 }

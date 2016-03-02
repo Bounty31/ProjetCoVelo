@@ -3,10 +3,6 @@ function sortArrayAscendant(array) {
     return array;
 }
 
-function removeArrayDuplicates(array) {
-    return array.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
-}
-
 function makeSections() {
     var min = 0;
     var max = chart_data["altitude"].length - 1;
@@ -24,8 +20,26 @@ function makeSections() {
             sections.push([markers[i-1], markers[i]]);
         }
     }
+}
 
-    console.log(sections);
+function updateSectionVisu() {
+    // Clearing options from select
+    $("#selectSections").empty();
+    var option, tempIndex;
+
+
+    if (shownSections != undefined) {
+        for (var i = 1; i < shownSections.length + 1; i++) {
+            tempIndex = i - 1;
+            option = $("<option/>", {
+                text: "Section " + i,
+                value: tempIndex
+            });
+            option.appendTo("#selectSections");
+        }
+
+        $("#selectSections").multiselect('refresh');
+    }
 }
 
 function createSectionEdit() {
@@ -45,11 +59,12 @@ function createSectionEdit() {
 
             if (sections.length > 0) {
                 markers.splice( $.inArray("0", markers), 1);
-                console.log(markers);
+                hiddenSections = [];
+                shownSections = [];
+                hiddenVisuSections = [];
 
                 for (var i = 0; i < markers.length; i++) {
                     var plotId = "plotline-" + numberPlotLines;
-                    console.log(chart_data["altitude"][markers[i]][0]);
                     chart.xAxis[0].addPlotLine({
                         value: chart_data["altitude"][markers[i]][0],
                         width: 2,
@@ -71,10 +86,18 @@ function createSectionEdit() {
                         selected: !!parseInt(data["cacher"][tempIndex])
                     });
                     option.appendTo("#selectSectionsEdit");
+                    if (!!parseInt(data["cacher"][tempIndex])) {
+                        hiddenSections.push(sections[tempIndex]);
+                    }
+                    else {
+                        shownSections.push(sections[tempIndex]);
+                    }
                 }
 
                 $("#selectSectionsEdit").multiselect('refresh');
             }
+            updateGraph();
+            updateSectionVisu();
         }
     });
 }
