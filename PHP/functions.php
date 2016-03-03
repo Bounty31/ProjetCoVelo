@@ -15,6 +15,8 @@ if (isset($_POST["query"])) {
         uploadSections();
     else if ($_POST["query"] == "getAllSections")
         getAllSections();
+    else if($_POST["query"] == "affichageTrace")
+        affichageTrace();
     else
         echo "erreur";
 }
@@ -199,4 +201,30 @@ function getAllSections() {
     else {
         echo json_encode($data);
     }
+}
+
+
+function affichageTrace(){
+    global $bdd;
+    $sql = "SELECT * FROM trace_id";
+    $result = $bdd->query($sql);
+
+    $data = [];
+
+    $id = [];
+    $nom_parcours = [];
+    $date = [];
+
+
+    while ($row = $result->fetch()) {
+        $id[] = $row["id"];
+        $nom_parcours[] = $row["nom_parcours"];
+        $date[] = $row["date"];
+    }
+
+    $data["id"] = $id;
+    $data["nom_parcours"] = $nom_parcours;
+    $data["date"] = $date;
+
+    echo json_encode($data);
 }
