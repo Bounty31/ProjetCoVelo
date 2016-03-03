@@ -1,16 +1,21 @@
-function initMap() {
+function initMap(chart_data) {
   var map = new google.maps.Map(document.getElementById('parcours'), {
-    zoom: 3,
-    center: {lat: 0, lng: -180},
+    zoom:5,
+    center: {lat: chart_data['latitude'][3000][0], lng: chart_data['longitude'][3000][0]},
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
+  var flightPlanCoordinates = Array();
 
-  var flightPlanCoordinates = [
-    {lat: 37.772, lng: -122.214},
-    {lat: 21.291, lng: -157.821},
-    {lat: -18.142, lng: 178.431},
-    {lat: -27.467, lng: 153.027}
-  ];
+console.log(chart_data['latitude'][1]);
+    for (var i = 0; i < chart_data['longitude'].length; i++) {
+      flightPlanCoordinates.push({'lng':chart_data['longitude'][i][0],'lat':chart_data['latitude'][i][0]});
+
+    }
+    console.log(flightPlanCoordinates[1]);
+  
+
+  
+
   var flightPath = new google.maps.Polyline({
     path: flightPlanCoordinates,
     geodesic: true,
@@ -18,7 +23,11 @@ function initMap() {
     strokeOpacity: 1.0,
     strokeWeight: 2
   });
-  
 
   flightPath.setMap(map);
+  
+}
+
+function resizeMap(){
+   google.maps.event.trigger(map, 'resize');
 }

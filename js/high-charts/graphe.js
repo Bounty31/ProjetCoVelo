@@ -362,8 +362,8 @@ function initializeSequence() {
                 freq_cardiaque.push([distance, parseInt(data["freq_cardiaque"][i])]);
                 puissance.push([distance, parseInt(data["puissance"][i])]);
                 freq_pedalage.push([distance, parseInt(data["freq_pedalage"][i])]);
-                latitude.push([distance, parseInt(data["latitude"][i])]);
-                longitude.push([distance, parseInt(data["longitude"][i])]);
+                latitude.push([ parseFloat(data["latitude"][i])]);
+                longitude.push([parseFloat(data["longitude"][i])]);
             }
 
             chart_data = {
@@ -381,6 +381,7 @@ function initializeSequence() {
 
             // UI elements
             createSectionEdit();
+            initMap(chart_data);
         }
     });
 }
